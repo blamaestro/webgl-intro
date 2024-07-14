@@ -1,0 +1,11 @@
+{
+  "name": "webgl-intro",
+  "version": "1.0.0",
+  "description": "My first introduction to WebGL.",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  }
+}
