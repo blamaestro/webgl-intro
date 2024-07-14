@@ -1,5 +1,5 @@
-import context from './context.js';
-import { render } from './render.js';
+import context from './context';
+import { render } from './render';
 
 export function updateWindow() {
   const { canvas, gl } = context;

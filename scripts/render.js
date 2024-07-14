@@ -1,9 +1,11 @@
-import context from './context.js';
+import { mat4 } from 'gl-matrix';
 
-import vertexShaderCode from '../shaders/vertexShader.js';
-import fragmentShaderCode from '../shaders/fragmentShader.js';
+import context from './context';
 
-import { triangleVertices } from '../constants/triangle.js';
+import vertexShaderCode from '../shaders/vertexShader';
+import fragmentShaderCode from '../shaders/fragmentShader';
+
+import { triangleVertices } from '../constants/triangle';
 
 export function render() {
   const gl = context.gl;
@@ -76,10 +78,10 @@ function setTriangleVertices(program) {
 
   gl.vertexAttribPointer(
     positionAttrLocation,               // Attribute location
-    2,                                  // Size of the attribute
+    3,                                  // Size of the attribute
     gl.FLOAT,                           // Type of attribute's elements
     false,                              // Is data normalized
-    5 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
+    6 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
     0 * Float32Array.BYTES_PER_ELEMENT, // Offset from the start of the vertex
   );
 
@@ -88,12 +90,26 @@ function setTriangleVertices(program) {
     3,                                  // Size of the attribute
     gl.FLOAT,                           // Type of attribute's elements
     false,                              // Is data normalized
-    5 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
-    2 * Float32Array.BYTES_PER_ELEMENT, // Offset from the start of the vertex
+    6 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
+    3 * Float32Array.BYTES_PER_ELEMENT, // Offset from the start of the vertex
   );
 
   gl.enableVertexAttribArray(positionAttrLocation);
   gl.enableVertexAttribArray(colorAttrLocation);
+
+  const matWorldUniformLocation = gl.getUniformLocation(program, 'mWorld');
+  const matViewUniformLocation = gl.getUniformLocation(program, 'mView');
+  const matProjectionUniformLocation = gl.getUniformLocation(program, 'mProjection');
+
+  const worldMatrix = new Float32Array(16);
+  const viewMatrix = new Float32Array(16);
+  const projectionMatrix = new Float32Array(16);
+
+  mat4.identity(worldMatrix);
+  mat4.identity(viewMatrix);
+  mat4.identity(projectionMatrix);
+
+  console.log(worldMatrix);
 }
 
 function draw(program) {
