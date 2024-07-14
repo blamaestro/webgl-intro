@@ -1,18 +1,21 @@
-import context from './context';
+import context from '@/constants/context';
 import { updateWindow } from './events';
 
 function main() {
-  context.canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
 
-  if (!context.canvas) {
+  if (!canvas) {
     throw new Error('Canvas element not found');
   }
 
-  context.gl = context.canvas.getContext('webgl');
+  const gl = canvas.getContext('webgl')!;
 
-  if (!context.gl) {
-    console.error('Your browser does not support WebGL.');
+  if (!gl) {
+    throw new Error('Your browser does not support WebGL.');
   }
+
+  context.canvas = canvas;
+  context.gl = gl;
 
   updateWindow();
 }
