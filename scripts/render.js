@@ -6,13 +6,11 @@ import fragmentShaderCode from '../shaders/fragmentShader.js';
 export function render() {
   const gl = context.gl;
 
-  gl.clearColor(0.1, 0.1, 0.1, 1);
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
   const shaders = createShaders();
   const program = createProgram(shaders);
 
-  console.log('Program created', program);
+  setTriangleVertices(program);
+  draw(program);
 }
 
 function createShaders() {
@@ -61,4 +59,40 @@ function createProgram(shaders) {
   }
 
   return program;
+}
+
+function setTriangleVertices(program) {
+  const gl = context.gl;
+
+  // X and Y coordinates of triangle vertices
+  const triangleVertices = [
+    0.0, 0.5,
+    -0.5, -0.5,
+    0.5, -0.5,
+  ];
+
+  const triangleVertexBuffer = gl.createBuffer();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+
+  const positionAttrLocation = gl.getAttribLocation(program, 'vertPosition');
+
+  gl.vertexAttribPointer(
+    positionAttrLocation,               // Attribute location
+    2,                                  // Size of the attribute
+    gl.FLOAT,                           // Type of attribute's elements
+    false,                              // Is data normalized
+    2 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
+    0,                                  // Offset from the start of the vertex
+  );
+
+  gl.enableVertexAttribArray(positionAttrLocation);
+}
+
+function draw(program) {
+  const gl = context.gl;
+
+  gl.useProgram(program);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
