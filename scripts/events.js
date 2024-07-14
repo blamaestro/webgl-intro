@@ -1,7 +1,7 @@
 import context from './context.js';
 import { render } from './render.js';
 
-export function resizeWindow() {
+export function updateWindow() {
   const { canvas, gl } = context;
 
   canvas.width = window.innerWidth;
@@ -12,4 +12,4 @@ export function resizeWindow() {
   render();
 }
 
-window.addEventListener('resize', resizeWindow);
+window.addEventListener('resize', updateWindow);

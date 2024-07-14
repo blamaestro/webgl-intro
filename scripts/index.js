@@ -1,5 +1,5 @@
 import context from './context.js';
-import { resizeWindow } from './events.js';
+import { updateWindow } from './events.js';
 
 function main() {
   context.canvas = document.getElementById('canvas');
@@ -9,7 +9,7 @@ function main() {
     console.error('Your browser does not support WebGL.');
   }
 
-  resizeWindow();
+  updateWindow();
 }
 
 window.addEventListener('load', main);
