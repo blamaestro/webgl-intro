@@ -14,6 +14,11 @@ function main() {
     throw new Error('Your browser does not support WebGL.');
   }
 
+  gl.enable(gl.DEPTH_TEST);
+  gl.enable(gl.CULL_FACE);
+  gl.frontFace(gl.CCW);
+  gl.cullFace(gl.BACK);
+
   context.canvas = canvas;
   context.gl = gl;
 

@@ -5,7 +5,7 @@ import context from '@/constants/context';
 import vertexShaderCode from '@/shaders/vertexShader';
 import fragmentShaderCode from '@/shaders/fragmentShader';
 
-import { triangleVertices } from '@/constants/triangle';
+import { cubeVertices, cubeTriangleIndices } from '@/constants/cube';
 
 export function createShaders() {
   const gl = context.gl;
@@ -60,13 +60,16 @@ export function createProgram(shaders: WebGLShader[]) {
   return program;
 }
 
-export function setTriangleVertices(program: WebGLProgram) {
+export function setCubeVertices(program: WebGLProgram) {
   const gl = context.gl;
 
-  const triangleVertexBuffer = gl.createBuffer();
+  const cubeVertexBuffer = gl.createBuffer();
+  const cubeIndexBuffer = gl.createBuffer();
 
-  gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, cubeVertexBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cubeVertices), gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cubeIndexBuffer);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(cubeTriangleIndices), gl.STATIC_DRAW);
 
   const positionAttrLocation = gl.getAttribLocation(program, 'vertPosition');
   const colorAttrLocation = gl.getAttribLocation(program, 'vertColor');
@@ -109,7 +112,7 @@ export function setUniformMatrices(program: WebGLProgram) {
   const aspectRatio = canvas ? canvas.width / canvas.height : 1;
 
   mat4.identity(context.worldMatrix);
-  mat4.lookAt(context.viewMatrix, [0, 0, -2], [0, 0, 0], [0, 1, 0]);
+  mat4.lookAt(context.viewMatrix, [0, 0, -8], [0, 0, 0], [0, 1, 0]);
   mat4.perspective(context.projectionMatrix, glMatrix.toRadian(45), aspectRatio, 0.1, 1000.0);
 
   gl.uniformMatrix4fv(context.matWorldUniformLocation, false, context.worldMatrix);
