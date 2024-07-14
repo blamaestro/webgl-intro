@@ -3,7 +3,7 @@
  * where the z-coordinate is 0.0 and the w-coordinate is 1.0.
  */
 
-const vertexShader = `
+const vertexShader: string = `
   precision mediump float;
 
   attribute vec3 vertPosition;

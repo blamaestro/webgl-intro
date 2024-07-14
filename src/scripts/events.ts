@@ -3,6 +3,10 @@ import { render } from './render';
 
 export function updateWindow() {
   const { canvas, gl } = context;
+
+  if (!canvas || !gl) {
+    throw new Error('The window cannot be updated because of missing canvas context');
+  }
   
   if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
     canvas.width = window.innerWidth;

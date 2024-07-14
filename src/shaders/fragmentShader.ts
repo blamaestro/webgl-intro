@@ -3,7 +3,7 @@
  * where the z-coordinate is 0.0 and the w-coordinate is 1.0.
  */
 
-const fragmentShader = `
+const fragmentShader: string = `
   precision mediump float;
 
   varying vec3 fragColor;

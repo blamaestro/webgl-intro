@@ -1,15 +1,15 @@
 import { mat4 } from 'gl-matrix';
 
+import vertexShaderCode from '@/shaders/vertexShader';
+import fragmentShaderCode from '@/shaders/fragmentShader';
+
+import { triangleVertices } from '@/constants/triangle';
+
 import context from './context';
 
-import vertexShaderCode from '../shaders/vertexShader';
-import fragmentShaderCode from '../shaders/fragmentShader';
-
-import { triangleVertices } from '../constants/triangle';
+const missingContextError = new Error('WebGL context is missing');
 
 export function render() {
-  const gl = context.gl;
-
   const shaders = createShaders();
   const program = createProgram(shaders);
 
@@ -20,10 +20,15 @@ export function render() {
 function createShaders() {
   const gl = context.gl;
 
+  if (!gl) throw missingContextError;
+
   const vertexShader = gl.createShader(gl.VERTEX_SHADER);
   const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
 
-  const shaders = [vertexShader, fragmentShader];
+  if (!vertexShader) throw new Error('Vertex shader cannot not be created');
+  if (!fragmentShader) throw new Error('Fragment shader cannot not be created');
+
+  const shaders = [vertexShader, fragmentShader] as WebGLShader[];
   const shaderNames = ['Vertex', 'Fragment'];
 
   gl.shaderSource(vertexShader, vertexShaderCode);
@@ -41,10 +46,14 @@ function createShaders() {
   return shaders;
 }
 
-function createProgram(shaders) {
+function createProgram(shaders: WebGLShader[]) {
   const gl = context.gl;
 
+  if (!gl) throw missingContextError;
+
   const program = gl.createProgram();
+
+  if (!program) throw new Error('WebGL program cannot not be created');
 
   shaders.forEach(shader => gl.attachShader(program, shader));
 
@@ -65,8 +74,10 @@ function createProgram(shaders) {
   return program;
 }
 
-function setTriangleVertices(program) {
+function setTriangleVertices(program: WebGLProgram) {
   const gl = context.gl;
+
+  if (!gl) throw missingContextError;
 
   const triangleVertexBuffer = gl.createBuffer();
 
@@ -112,8 +123,10 @@ function setTriangleVertices(program) {
   console.log(worldMatrix);
 }
 
-function draw(program) {
+function draw(program: WebGLProgram) {
   const gl = context.gl;
+
+  if (!gl) throw missingContextError;
 
   gl.useProgram(program);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
