@@ -3,6 +3,8 @@ import context from './context.js';
 import vertexShaderCode from '../shaders/vertexShader.js';
 import fragmentShaderCode from '../shaders/fragmentShader.js';
 
+import { triangleVertices } from '../constants/triangle.js';
+
 export function render() {
   const gl = context.gl;
 
@@ -64,30 +66,34 @@ function createProgram(shaders) {
 function setTriangleVertices(program) {
   const gl = context.gl;
 
-  // X and Y coordinates of triangle vertices
-  const triangleVertices = [
-    0.0, 0.5,
-    -0.5, -0.5,
-    0.5, -0.5,
-  ];
-
   const triangleVertexBuffer = gl.createBuffer();
 
   gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleVertices), gl.STATIC_DRAW);
 
   const positionAttrLocation = gl.getAttribLocation(program, 'vertPosition');
+  const colorAttrLocation = gl.getAttribLocation(program, 'vertColor');
 
   gl.vertexAttribPointer(
     positionAttrLocation,               // Attribute location
     2,                                  // Size of the attribute
     gl.FLOAT,                           // Type of attribute's elements
     false,                              // Is data normalized
-    2 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
-    0,                                  // Offset from the start of the vertex
+    5 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
+    0 * Float32Array.BYTES_PER_ELEMENT, // Offset from the start of the vertex
+  );
+
+  gl.vertexAttribPointer(
+    colorAttrLocation,                  // Attribute location
+    3,                                  // Size of the attribute
+    gl.FLOAT,                           // Type of attribute's elements
+    false,                              // Is data normalized
+    5 * Float32Array.BYTES_PER_ELEMENT, // Size of individual vertex
+    2 * Float32Array.BYTES_PER_ELEMENT, // Offset from the start of the vertex
   );
 
   gl.enableVertexAttribArray(positionAttrLocation);
+  gl.enableVertexAttribArray(colorAttrLocation);
 }
 
 function draw(program) {
